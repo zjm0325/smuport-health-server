@@ -21,13 +21,13 @@ class AuthView(APIView):
     parser_classes = [JSONParser]
 
     def post(self, request, *args, **kwargs):
-        user = request.POST.get('username')
-        pwd = request.POST.get('password')
+        user = request.data.get('username', '')
+        pwd = request.data.get('password', '')
         user = authenticate(username=user, password=pwd)   # 验证用户名和密码
         if user is not None:
             login(request, user)    # 将登陆成功的返回的user对象传入，这样就可以记录下用户的登录状态，(在全局存储用户信息，在任何视图函数都可以取出来)，人家有什么参数就传什么
             return Response(
-                {'err_code': 2000, 'msg': '', 'data': {user.ifPassed}}
+                {'err_code': 2000, 'msg': '', 'data': {1}}
             )
         else:
             return Response(
